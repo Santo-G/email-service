@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane stylesheets="@ServerView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Server.Controller.ServerController">
+   <center>
+      <AnchorPane fx:id="anchor" prefHeight="636.0" prefWidth="817.0">
+         <children>
+            <TextArea fx:id="areaclient" editable="false" layoutX="8.0" layoutY="10.0" prefHeight="567.0" prefWidth="803.0" promptText="Log delle transazioni">
+               <font>
+                  <Font name="Verdana" size="18.0" />
+               </font>
+            </TextArea>
+            <Button fx:id="puliscilog" layoutX="717.0" layoutY="586.0" prefHeight="35.0" prefWidth="78.0" text="Clear" />
+      
+            </children>
+      </AnchorPane>
+   </center>
+   <top>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="LabelLog" layoutX="24.0" layoutY="10.0" prefHeight="35.0" prefWidth="117.0" text="Log File" textFill="#89eaea">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>
