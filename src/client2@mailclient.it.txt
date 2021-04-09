@@ -1,0 +1,2 @@
+1§client0@mailclient.it§client2@mailclient.it§prova§prova§03/12/2020 19:00§false
+2§client1@mailclient.it§client0@mailclient.it,client2@mailclient.it§prova multi§prova multi§03/12/2020 19:02§false
