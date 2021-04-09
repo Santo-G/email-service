@@ -19,7 +19,7 @@ public class ServerApp extends Application {
         stage.getIcons().add(icon);
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        scene.getStylesheets().add(getClass().getResource("View/ServerView.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("view/ServerView.css").toExternalForm());
         stage.show();
         ServerModel model = new ServerModel();
     }
