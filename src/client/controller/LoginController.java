@@ -95,11 +95,11 @@ public class LoginController {
     /** show mail box and change Scene*/
     public void showClientView(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../View/ClientView.fxml"));
+        loader.setLocation(getClass().getResource("../view/ClientView.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        scene.getStylesheets().add(getClass().getResource("../View/ClientView.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("../view/ClientView.css").toExternalForm());
         window.setScene(scene);
         window.show();
         mailController = loader.getController();
