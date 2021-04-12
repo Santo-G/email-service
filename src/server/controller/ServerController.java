@@ -60,6 +60,32 @@ public class ServerController {
         public ClientAccept(ServerSocket socket) {
             this.serverSocket = socket;
         }
+
+        @Override
+        public void run() {
+            Socket s = null;
+            connection = true;
+            try {
+                while (connection) {
+                    s = serverSocket.accept();
+                    Runnable r = new server.controller.ServerController.ClientRequestHandle(s);
+                    Thread t = new Thread(r);
+                    t.setDaemon(true);
+                    t.start();
+                    if (s.isClosed()) {
+                        connection = false;
+                    }
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                try {
+                    serverSocket.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
     }
 
     /**
