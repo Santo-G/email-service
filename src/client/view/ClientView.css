@@ -1,0 +1,60 @@
+@font-face {
+    font-family: Arsenal-Regular;
+    src: url("ArsenalFont/Arsenal-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Arsenal-Bold;
+    font-weight: bold;
+    src: url("ArsenalFont/Arsenal-Bold.otf") format("opentype");
+}
+
+BorderPane{
+    -fx-font-family: Arsenal-Regular;
+    -fx-background-image: url("background-clientView.jpg");
+}
+
+#clientLabel{
+    -fx-font-family: Arsenal-Bold;
+}
+
+SplitPane{
+    -fx-background-image: url("background-clientView.jpg");
+}
+
+
+#d,#ad,#o,#dt{
+    -fx-font-family: "Verdana";
+
+    -fx-font-size: 13px;
+}
+#idmail,#oggetto,#mittente,#data,#dest{
+    -fx-font-family: Arsenal-Regular;
+    -fx-font-size: 15px;
+}
+#scrivi,#rispondi,#inoltra,#elimina,#logout,#a,#da,#ogg,#date,#replyall,#menuAction{
+    -fx-font-family: "Verdana";
+    -fx-font-size: 13px;
+    -fx-border-style: none;
+}
+
+
+#menuAction{
+    -fx-background-color: inherit;
+    -fx-border-radius: 50%;
+    -fx-effect: dropshadow(gaussian, #598efa, 10, 0.3, 0.0, 0.0);
+
+}
+
+#elimina,#scrivi,#logout{
+    -fx-border-color: #598efa;
+    -fx-border-radius: 5px;
+}
+#textarea{
+    -fx-background-color: -fx-control-inner-background;
+    -fx-background-insets: 0;
+    -fx-padding: 1 3 1 3;
+    -fx-border-color: #598efa;
+    -fx-border-radius: 5px;
+    -fx-font-size: 18px;
+}
