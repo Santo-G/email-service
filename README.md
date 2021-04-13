@@ -10,7 +10,6 @@ The source code contains both server and client implementations, uses MVC patter
 - [Technologies](#technologies)
 - [Tools](#tools)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Project description 
 The project is structured with an email server, that handles both the user’s mailboxes and the necessary mail clients, that allows users to log into their respective mailboxes.
@@ -58,7 +57,11 @@ It is recommended to pay attention to the design phase to obtain the easiest imp
 - GitHub Actions
 
 ## Contributing
-coming soon ...
+<a href="https://github.com/LucreziaC">
+ <img alt="LucreziaC" width="90" height="90" src="https://avatars.githubusercontent.com/u/37901017?v=4" />
+</a>
 
-## License
-coming soon ...
+<a href="https://github.com/Santo-G">
+ <img alt="Santo-G" width="90" height="90" src="https://avatars.githubusercontent.com/u/77076220?v=4" />
+</a>
+
