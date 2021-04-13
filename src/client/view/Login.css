@@ -1,0 +1,68 @@
+@font-face {
+    font-family: Arsenal-Regular;
+    src: url("ArsenalFont/Arsenal-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Arsenal-Bold;
+    font-weight: bold;
+    src: url("ArsenalFont/Arsenal-Bold.otf") format("opentype");
+}
+
+
+AnchorPane{
+    -fx-font-family: Arsenal-Regular;
+    -fx-font-size: 15px;
+    -fx-background-image: url("background-login.jpg");
+
+}
+ImageView{
+    -fx-border-radius: 50%;
+}
+
+
+/*#comboMail, #accedi{
+
+   -fx-font-size: 14px;
+    -fx-alignment: center;
+}*/
+
+.combo-box{
+    /*
+    -fx-background-color:  linear-gradient(to bottom, white, rgba(81, 111, 134, 0.26));*/
+    -fx-background-color: inherit;
+
+    -fx-border-radius: 50%;
+
+    -fx-effect: dropshadow(gaussian, #598efa, 10, 0.3, 0.0, 0.0);
+
+
+
+}
+.combo-box.menu-item{
+    -fx-background-color: inherit;
+    -fx-border-color: #598efa;
+    -fx-border-radius: 50%;
+}
+
+#accedi{
+    -fx-background-color: inherit;
+    -fx-border-radius: 50%;
+    -fx-effect: dropshadow(gaussian, #598efa, 10, 0.3, 0.0, 0.0);
+    -fx-font-size: 15px;
+
+}
+
+
+
+#mailField{
+    -fx-background-color: inherit;
+    -fx-font-family: Arsenal-Regular;
+    -fx-border-color: #598efa;
+    -fx-border-radius: 10px;
+}
+
+.text-field.error {
+    -fx-text-box-border: red ;
+    -fx-focus-color: red ;
+}

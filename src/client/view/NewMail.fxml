@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="629.0" prefWidth="642.0" stylesheets="@NewMail.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.NewMailController">
+   <children>
+      <Label fx:id="a" alignment="CENTER" layoutX="75.0" layoutY="76.0" text="A:" textAlignment="CENTER" />
+      <Label fx:id="ogg" alignment="CENTER" layoutX="32.0" layoutY="120.0" text="Oggetto:" textAlignment="CENTER" />
+      <Label layoutX="70.0" layoutY="34.0" text="Da:" />
+      <TextArea fx:id="testoMail" layoutX="63.0" layoutY="174.0" maxWidth="555.0" minHeight="413.0" prefHeight="413.0" prefWidth="555.0" />
+      <TextField fx:id="mittente" layoutX="120.0" layoutY="28.0" maxWidth="397.0" minHeight="10.0" minWidth="354.0" prefHeight="33.0" prefWidth="354.0" />
+      <TextField fx:id="destinatario" layoutX="120.0" layoutY="70.0" maxWidth="397.0" minHeight="10.0" minWidth="343.0" prefHeight="33.0" prefWidth="354.0" />
+      <TextField fx:id="oggetto" layoutX="120.0" layoutY="114.0" maxWidth="307.0" minHeight="10.0" minWidth="308.0" prefHeight="33.0" prefWidth="354.0" />
+      <Button fx:id="invioButton" layoutX="304.0" layoutY="594.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="55.0" text="Invia" textAlignment="CENTER">
+         <padding>
+            <Insets bottom="5.0" />
+         </padding></Button>
+   </children>
+</AnchorPane>
