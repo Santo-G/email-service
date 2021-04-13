@@ -220,4 +220,30 @@ public class ServerController {
         }
     }
 
+    /**
+     * Method that initialize server window
+     */
+    public void initialize(ServerModel model) {
+        this.serverModel = model;
+        try {
+            connect();
+            areaclient.setWrapText(true);
+            cleanLog.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    areaclient.clear();
+                }
+            });
+            anchor.getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    Alert al = new Alert(Alert.AlertType.INFORMATION, "Server disconnected", ButtonType.CLOSE);
+                    al.setHeaderText(null);
+                    al.show();
+                }
+            });
+        } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
