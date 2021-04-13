@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import server.controller.ServerController;
 import server.model.ServerModel;
 
 public class ServerApp extends Application {
@@ -22,6 +23,8 @@ public class ServerApp extends Application {
         scene.getStylesheets().add(getClass().getResource("view/ServerView.css").toExternalForm());
         stage.show();
         ServerModel model = new ServerModel();
+        ServerController controller = loader.getController();
+        controller.initialize(model);
     }
 
     public static void main(String[] args) {
