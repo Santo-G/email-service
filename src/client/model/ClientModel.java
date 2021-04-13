@@ -1,9 +1,11 @@
 package client.model;
 
 import utils.Email;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 import javafx.collections.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -17,7 +19,9 @@ public class ClientModel {
     private boolean isConnect;
 
 
-    /* Metodo che apre la connesione del socket al server */
+    /**
+     * open connection to server with socket
+     */
     public boolean connect(String em) {
         try {
             InetAddress ip = InetAddress.getLocalHost();
@@ -34,14 +38,13 @@ public class ClientModel {
     }
 
 
-    /* Metodo che indica se la connessione da parte del client è stata interrotta */
     public boolean closeConnection() {
         boolean close = false;
         try {
-            if (!s.isClosed()) {    // se la socket non è chiusa
+            if (!s.isClosed()) {
                 Object[] obj = {"connection"};
                 try {
-                    out.writeObject(obj);   // invia sullo stream output un array di Object contenente la request "connection"
+                    out.writeObject(obj);
                     out.flush();
                     close = true;
                 } catch (IOException ex) {
@@ -55,16 +58,19 @@ public class ClientModel {
     }
 
 
-    /* Metodo che verifica se il server è online */
+    /**
+     * verify if server is online
+     */
     public boolean serverOnline() {
         return this.s != null && this.s.isConnected();  // se la socket non è chiusa ed è connessa ritorna true
     }
 
 
-    /* Metodo che carica le mail ricevute dal server nell'observable list. */
+    /**
+     * load server's mail in observervable List
+     */
     public void loadMail() {
         try {
-            // prende le mail ricevute dal server e inizializza l'array list con queste ultime
             ArrayList<Email> emails = (ArrayList<Email>) in.readObject();
             Collections.reverse(emails);
             observableEmail.setAll(emails);
@@ -74,34 +80,42 @@ public class ClientModel {
     }
 
 
-    /* Metodo che ritorna la lista delle mail. */
+    /**
+     * Return observable list of email
+     */
     public ObservableList<Email> getMail() {
         return observableEmail;
     }
 
 
-    /* Metodo che aggiunge un listener all'observable list */
+    /**
+     * add a listener to observable list
+     */
     public void addEmailObserver(ListChangeListener<Email> cl) {
         observableEmail.addListener(cl);
     }
 
 
-    /* Metodo che permette di inviare una mail. */
-    public boolean sendMail(Email e)  {
+    /**
+     * send mail passed as parameter
+     */
+    public boolean sendMail(Email e) {
         Object[] obj = {e, "send"};
         try {
-            out.writeObject(obj);   // invia al server un array di object con mail e request "send"
+            out.writeObject(obj);
             out.flush();
 
             return true;
         } catch (IOException ex) {
-            serverLost(); // se non riesce l'invio chiama il metodo serverLost che lancia un alert di errore
+            serverLost();
             return false;
         }
     }
 
 
-    /* Metodo che permette di cancellare una mail. */
+    /**
+     * delete email passed as parameter
+     */
     public void deleteMail(Email e) {
         Object[] obj = {e, "delete"};
         try {
@@ -113,7 +127,9 @@ public class ClientModel {
     }
 
 
-    /* Metodo che richiede al server di impostare come letta una mail non ancora letta. */
+    /**
+     * set mail as read
+     */
     public void readMail(Email e) {
         Object[] obj = {e, "read"};
         try {
@@ -125,7 +141,9 @@ public class ClientModel {
     }
 
 
-    /* Metodo che effettua il logout di un client, chiude gli stream di I/O e il socket. */
+    /**
+     * this method logout the client: close socket and I/O streams
+     */
     public boolean logout() {
         Object[] obj = {"logout"};
         try {
@@ -147,17 +165,21 @@ public class ClientModel {
     }
 
 
-    /* Metodo che aggiorna la lista delle mail */
+    /**
+     * update mailing list
+     */
     public void refresh() {
-        loadMail();     // inizializza l'observableList di mail con quelle ricevute dal server
-        Runnable refresh = new UpdateMailThread(this);      // crea un runnable passando se stesso (il model)
-        Thread t = new Thread(refresh);     // passa il runnable al Thread
-        t.setDaemon(true);      // setta a Daemon il Thread e lo fa partire
+        loadMail();
+        Runnable refresh = new UpdateMailThread(this);
+        Thread t = new Thread(refresh);
+        t.setDaemon(true);
         t.start();
     }
 
 
-    // lancia l'alert "server disconnesso"  ---> richiamato da sendMail se l'invio non è avvenuto
+    /**
+     * alert if server is disconnected
+     */
     private void serverLost() {
         Alert a = new Alert(Alert.AlertType.ERROR, "Server disconnesso!", ButtonType.CLOSE);
         a.setHeaderText(null);
@@ -165,7 +187,9 @@ public class ClientModel {
     }
 
 
-    /* Classe innestata che permette periodicamente di effettuare il pool delle mail in arrivo */
+    /**
+     * nested classe that periodically pull mails
+     * */
     private class UpdateMailThread extends Thread {
 
         private ClientModel m;
