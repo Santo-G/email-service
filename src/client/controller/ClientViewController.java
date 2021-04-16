@@ -1,9 +1,11 @@
 package client.controller;
 
 import utils.*;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javafx.application.Platform;
 import javafx.beans.value.*;
 import javafx.collections.ListChangeListener;
@@ -29,52 +31,53 @@ public class ClientViewController {
     @FXML
     private Label date;
     @FXML
-    private Button scrivi;
+    private Button write;
     @FXML
-    private MenuItem rispondi;
+    private MenuItem reply;
     @FXML
     private MenuItem replyall;
     @FXML
-    private MenuItem inoltra;
+    private MenuItem forward;
     @FXML
-    private Button elimina;
+    private Button delete;
     @FXML
     private Button logout;
     @FXML
     private TextArea textarea;
     @FXML
-    private AnchorPane anchorpanevisualizza;
+    private AnchorPane anchorpaneshow;
     @FXML
     private Label clientLabel;
     @FXML
     private TableView<Email> tableview;
     @FXML
-    private TableColumn<Email, String> dest;
+    private TableColumn<Email, String> recipient;
     @FXML
-    private TableColumn<Email, String> mittente;
+    private TableColumn<Email, String> sender;
     @FXML
-    private TableColumn<Email, String> oggetto;
+    private TableColumn<Email, String> subject;
     @FXML
-    private TableColumn<Email, Date> data;
-    private String nome;
+    private TableColumn<Email, Date> actualdate;
+    private String name;
     private ClientModel model;
     private int id;
 
-    /** inizialize model and mail */
+    /**
+     * Method that inizializes model and mail
+     */
     public void initialize(ClientModel model, String nome) {
         this.model = model;
-        this.nome = nome;
-
+        this.name = nome;
         try {
             tableview.setPlaceholder(new Label("No mail in mailbox"));
             tableview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             clientLabel.setText(nome);
             model.refresh();
-            mittente.setCellValueFactory(new PropertyValueFactory<Email, String>("Mittente"));
+            sender.setCellValueFactory(new PropertyValueFactory<Email, String>("Sender"));
             // vengono inizializzate anche la restanti colonne della TableView
-            dest.setCellValueFactory(new PropertyValueFactory<Email, String>("Destinatario"));
-            oggetto.setCellValueFactory(new PropertyValueFactory<Email, String>("Oggetto"));
-            data.setCellFactory(column -> {
+            recipient.setCellValueFactory(new PropertyValueFactory<Email, String>("Recipient"));
+            subject.setCellValueFactory(new PropertyValueFactory<Email, String>("Subject"));
+            actualdate.setCellFactory(column -> {
                 TableCell<Email, Date> cell = new TableCell<Email, Date>() {
                     private SimpleDateFormat format = new SimpleDateFormat("EEE dd/MM/yyyy HH:mm");
 
@@ -90,8 +93,7 @@ public class ClientViewController {
                 };
                 return cell;
             });
-            data.setCellValueFactory(new PropertyValueFactory<Email, Date>("Data"));
-
+            actualdate.setCellValueFactory(new PropertyValueFactory<Email, Date>("Date"));
             tableview.getItems().setAll(model.getMail());
             model.addEmailObserver(new ListChangeListener<Email>() {
                 @Override
@@ -99,12 +101,11 @@ public class ClientViewController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            Alert a = new Alert(Alert.AlertType.INFORMATION, "Nuove mail da leggere!", ButtonType.OK);
+                            Alert a = new Alert(Alert.AlertType.INFORMATION, "New mails available!", ButtonType.OK);
                             a.setHeaderText(null);
                             a.show();
                         }
                     });
-
                     if (c.next()) {
                         if (c.wasAdded()) {
                             tableview.getItems().setAll(model.getMail());
@@ -116,7 +117,7 @@ public class ClientViewController {
             tableview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Email>() {
                 @Override
                 public void changed(ObservableValue<? extends Email> observable, Email oldValue, Email newValue) {
-                    anchorpanevisualizza.setDisable(false);
+                    anchorpaneshow.setDisable(false);
                     textarea.clear();
                     if (newValue != null) {
                         if (!newValue.isRead()) {
@@ -146,9 +147,7 @@ public class ClientViewController {
                 }
             });
 
-
-
-            scrivi.setOnAction(new EventHandler<ActionEvent>() {
+            write.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
@@ -159,7 +158,7 @@ public class ClientViewController {
                 }
             });
 
-            rispondi.setOnAction(new EventHandler<ActionEvent>() {
+            reply.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
@@ -181,7 +180,7 @@ public class ClientViewController {
                 }
             });
 
-            inoltra.setOnAction(new EventHandler<ActionEvent>() {
+            forward.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
@@ -192,15 +191,13 @@ public class ClientViewController {
                 }
             });
 
-            elimina.setOnAction(new EventHandler<ActionEvent>() {
+            delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                        // richiama deleteMail passando l'elemento selezionato nella tabella
                         model.deleteMail(tableview.getSelectionModel().getSelectedItem());
-                        int x = tableview.getSelectionModel().getSelectedIndex();   // si ricava l'indice dell'elemento
-                        tableview.getItems().remove(x);     // si rimuove dalla tabella
-
+                        int x = tableview.getSelectionModel().getSelectedIndex();
+                        tableview.getItems().remove(x);
                     } catch (ArrayIndexOutOfBoundsException e) {
                         System.out.println(e.getMessage());
                     }
@@ -210,11 +207,11 @@ public class ClientViewController {
             logout.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    model.logout();     // richiama il metodo logout di model e mostra un alert
-                    Alert a = new Alert(Alert.AlertType.INFORMATION, "Logout effettuato!", ButtonType.OK);
+                    model.logout();
+                    Alert a = new Alert(Alert.AlertType.INFORMATION, "Logout done!", ButtonType.OK);
                     a.setHeaderText(null);
                     a.show();
-                    Stage stage = (Stage) scrivi.getScene().getWindow();
+                    Stage stage = (Stage) write.getScene().getWindow();
                     stage.close();
                 }
             });
@@ -223,7 +220,9 @@ public class ClientViewController {
         }
     }
 
-    /**return mail subject*/
+    /**
+     * Method that returns mail subject
+     */
     public String getSubject() {
         String o = " ";
         String og = ogg.getText();
@@ -234,12 +233,12 @@ public class ClientViewController {
         return o;
     }
 
-    /** this methods show newMail screen and recall initialize's controller method passing parameter
-     *
-    *  reply ---> default: sender | recipient | subject | actions "reply/reply all"
-    *  forward ---> default: sender | subject | action "forward"
-    *  new mail --->  default: sender | action "write"   */
-
+    /**
+     * Method that shows newMail screen and recall initialize controller method passing parameter <p>
+     * reply ---> default: sender | recipient | subject | actions "reply/reply all"
+     * forward ---> default: sender | subject | action "forward"
+     * new mail --->  default: sender | action "write"
+     */
     public void showReplyView(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../view/NewMail.fxml"));
@@ -250,7 +249,7 @@ public class ClientViewController {
         window.setScene(scene);
         window.show();
         NewMailController s = loader.getController();
-        s.inizialize(model, nome, id, da.getText(), a.getText(), getSubject(), " ", "rispondi");
+        s.inizialize(model, name, id, da.getText(), a.getText(), getSubject(), " ", "reply");
     }
 
     public void showNewMailView(ActionEvent e) throws IOException {
@@ -263,7 +262,7 @@ public class ClientViewController {
         window.setScene(scene);
         window.show();
         NewMailController s = loader.getController();
-        s.inizialize(model, nome, id, da.getText(), " ", " ", " ", "scrivi");
+        s.inizialize(model, name, id, da.getText(), " ", " ", " ", "write");
     }
 
     public void showForwardView(ActionEvent e) throws IOException {
@@ -276,7 +275,7 @@ public class ClientViewController {
         window.setScene(scene);
         window.show();
         NewMailController s = loader.getController();
-        s.inizialize(model, nome, id, da.getText(), " ", getSubject(), textarea.getText(), "inoltra");
+        s.inizialize(model, name, id, da.getText(), " ", getSubject(), textarea.getText(), "forward");
     }
 
     public void showReplyAllView(ActionEvent e) throws IOException {
@@ -289,7 +288,6 @@ public class ClientViewController {
         window.setScene(scene);
         window.show();
         NewMailController s = loader.getController();
-        s.inizialize(model, nome, id, da.getText(), a.getText(), getSubject(), " ", "replyall");
+        s.inizialize(model, name, id, da.getText(), a.getText(), getSubject(), " ", "replyall");
     }
 }
-

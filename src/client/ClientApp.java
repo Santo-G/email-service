@@ -22,7 +22,6 @@ public class ClientApp extends Application {
         stage.getIcons().add(icon);
         scene.getStylesheets().add(getClass().getResource("view/Login.css").toExternalForm());
         stage.show();
-
         ClientModel model = new ClientModel();
         LoginController controller = loader.getController();
         controller.initialize(model);

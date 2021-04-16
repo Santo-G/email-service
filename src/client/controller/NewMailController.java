@@ -15,111 +15,104 @@ import client.model.ClientModel;
 public class NewMailController {
 
     @FXML
-    private Button invioButton;
+    private Button sendButton;
     @FXML
-    private TextField mittente;
+    private TextField sender;
     @FXML
-    private TextField destinatario;
+    private TextField recipient;
     @FXML
-    private TextField oggetto;
+    private TextField subject;
     @FXML
-    private TextArea testoMail;
+    private TextArea mailText;
     private ClientModel model;
 
-
     /**
-     * invocated by ClientViewController. This method manage the required action.
-     * According to action's type compile mail's fields making editable or not
-     * Exemple: in reply you couldn't write a recipient
-     * In all cases, sender is not editable
+     * Invocated by ClientViewController, this method manages the required action.
+     * According to the type of action it compiles mail fields
      */
-
-    public void inizialize(ClientModel model, String nome, int id, String da, String a, String ogg, String t, String action) {
+    public void inizialize(ClientModel model, String name, int id, String from, String to, String subj, String tx, String action) {
         this.model = model;
         try {
             switch (action) {
-                case "scrivi":
-                    mittente.setText(nome);
-                    mittente.setEditable(false);
+                case "write":
+                    sender.setText(name);
+                    sender.setEditable(false);
                     break;
-                case "rispondi":
-                    mittente.setText(nome);
-                    mittente.setEditable(false);
-                    destinatario.setText(da);
-                    oggetto.setText("Re: " + ogg);
-                    destinatario.setEditable(false);
-                    oggetto.setEditable(false);
+                case "reply":
+                    sender.setText(name);
+                    sender.setEditable(false);
+                    recipient.setText(from);
+                    subject.setText("Re: " + subj);
+                    recipient.setEditable(false);
+                    subject.setEditable(false);
                     break;
-                case "inoltra":
-                    mittente.setText(nome);
-                    oggetto.setText("Fwd: " + ogg);
-                    testoMail.setText(t);
-                    mittente.setEditable(false);
-                    oggetto.setEditable(false);
-                    testoMail.setEditable(false);
+                case "forward":
+                    sender.setText(name);
+                    subject.setText("Fwd: " + subj);
+                    mailText.setText(tx);
+                    sender.setEditable(false);
+                    subject.setEditable(false);
+                    mailText.setEditable(false);
                     break;
                 case "replyall":
-                    mittente.setText(nome);
-                    mittente.setEditable(false);
-                    String[] aa = a.split(",");
+                    sender.setText(name);
+                    sender.setEditable(false);
+                    String[] aa = to.split(",");
                     if (aa.length == 1) {
-                        destinatario.setText(da);
+                        recipient.setText(from);
                     } else {
                         int iter=0;
                         while(iter<aa.length){
-                            if(nome.equals(aa[iter])){
+                            if(name.equals(aa[iter])){
                                iter++;
                             }
                             else{
-                                destinatario.setText(da+","+aa[iter]);
-                                destinatario.setEditable(false);
+                                recipient.setText(from+","+aa[iter]);
+                                recipient.setEditable(false);
                                 iter++;
                             }
                         }
-
                     }
-                    oggetto.setText("Re: " + ogg);
-                    oggetto.setEditable(false);
+                    subject.setText("Re: " + subj);
+                    subject.setEditable(false);
                     break;
             }
-            testoMail.setWrapText(true);
+            mailText.setWrapText(true);
 
-            invioButton.setOnAction(new EventHandler<ActionEvent>() {
+            sendButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    String testo = testoMail.getText();
-                    Date d = Date.from(Instant.now());
-                    String dest= destinatario.getText();
-                    String[] destinatari= dest.split(",");
+                    String text = mailText.getText();
+                    Date date = Date.from(Instant.now());
+                    String recipient= NewMailController.this.recipient.getText();
+                    String[] recipients= recipient.split(",");
                     String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
                     Pattern p = Pattern.compile(regex);
                     boolean correct=true;
                     int iter=0;
-                    // controlla se ogni destinatario inserito rispetta il pattern
-                    while(correct && iter<destinatari.length){
-                        Matcher m = p.matcher(destinatari[iter]);
+                    while(correct && iter<recipients.length){
+                        Matcher m = p.matcher(recipients[iter]);
                         boolean matchFound = m.matches();
-                        if(matchFound==false){      // se la mail è sbagliata viene settato il boolean
+                        if(matchFound==false){
                             correct=false;
                         }
                         iter++;
                     }
-
                     if (correct) {
-                        Email e = new Email(id, mittente.getText(), destinatario.getText(),
-                                oggetto.getText(), testo, d, false);
+                        Email e = new Email(id, sender.getText(), NewMailController.this.recipient.getText(),
+                                subject.getText(), text, date, false);
                         boolean emailSended=model.sendMail(e);
                         if(emailSended) {
-                            Alert a = new Alert(Alert.AlertType.INFORMATION, "Mail inviata con successo!", ButtonType.OK);
+                            Alert a = new Alert(Alert.AlertType.INFORMATION, "Mail successfully sent!", ButtonType.OK);
                             a.setHeaderText(null);
                             a.show();
-                            Stage stage = (Stage) invioButton.getScene().getWindow();
+                            Stage stage = (Stage) sendButton.getScene().getWindow();
                             stage.close();
                         }
 
                     }
                     else{
-                        Alert a = new Alert(Alert.AlertType.INFORMATION, "Indirizzo destinatario non corretto", ButtonType.OK);
+                        Alert a = new Alert(Alert.AlertType.INFORMATION, "Recipient address incorrect", ButtonType.OK);
                         a.setHeaderText(null);
                         a.show();
                     }
