@@ -11,16 +11,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public class ClientModel {
-
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Socket s;
     private ObservableList<Email> observableEmail = FXCollections.observableArrayList();
     private boolean isConnect;
 
-
     /**
-     * open connection to server with socket
+     * Method that opens connection to server
      */
     public boolean connect(String em) {
         try {
@@ -28,15 +26,14 @@ public class ClientModel {
             s = new Socket(ip, 1050);
             out = new ObjectOutputStream(s.getOutputStream());
             in = new ObjectInputStream(s.getInputStream());
-            out.writeObject(em);        // invia la mail scelta al server
+            out.writeObject(em);
             out.flush();
-            isConnect = in.readBoolean();       // il server invia il boolean connection per dire se è stabilita la connessione
+            isConnect = in.readBoolean();
         } catch (IOException e) {
             System.out.println("Connection: " + e.getMessage());
         }
         return isConnect;
     }
-
 
     public boolean closeConnection() {
         boolean close = false;
@@ -57,17 +54,15 @@ public class ClientModel {
         return close;
     }
 
-
     /**
-     * verify if server is online
+     * Method that verifies server status
      */
     public boolean serverOnline() {
-        return this.s != null && this.s.isConnected();  // se la socket non è chiusa ed è connessa ritorna true
+        return this.s != null && this.s.isConnected();
     }
 
-
     /**
-     * load server's mail in observervable List
+     * Method that loads server mail list
      */
     public void loadMail() {
         try {
@@ -79,25 +74,22 @@ public class ClientModel {
         }
     }
 
-
     /**
-     * Return observable list of email
+     * Method that returns observable list of email
      */
     public ObservableList<Email> getMail() {
         return observableEmail;
     }
 
-
     /**
-     * add a listener to observable list
+     * Method that add a listener to observable list
      */
     public void addEmailObserver(ListChangeListener<Email> cl) {
         observableEmail.addListener(cl);
     }
 
-
     /**
-     * send mail passed as parameter
+     * Method that sends mail
      */
     public boolean sendMail(Email e) {
         Object[] obj = {e, "send"};
@@ -112,9 +104,8 @@ public class ClientModel {
         }
     }
 
-
     /**
-     * delete email passed as parameter
+     * Method that deletes email
      */
     public void deleteMail(Email e) {
         Object[] obj = {e, "delete"};
@@ -126,9 +117,8 @@ public class ClientModel {
         }
     }
 
-
     /**
-     * set mail as read
+     * Method that sets a single mail as read
      */
     public void readMail(Email e) {
         Object[] obj = {e, "read"};
@@ -140,9 +130,8 @@ public class ClientModel {
         }
     }
 
-
     /**
-     * this method logout the client: close socket and I/O streams
+     * Method that logouts the client: close socket and I/O streams
      */
     public boolean logout() {
         Object[] obj = {"logout"};
@@ -164,9 +153,8 @@ public class ClientModel {
         return isConnect;
     }
 
-
     /**
-     * update mailing list
+     * Method that updates mailing list
      */
     public void refresh() {
         loadMail();
@@ -178,22 +166,20 @@ public class ClientModel {
 
 
     /**
-     * alert if server is disconnected
+     * Method that sends an alert if server is disconnected
      */
     private void serverLost() {
-        Alert a = new Alert(Alert.AlertType.ERROR, "Server disconnesso!", ButtonType.CLOSE);
+        Alert a = new Alert(Alert.AlertType.ERROR, "Server disconnected!", ButtonType.CLOSE);
         a.setHeaderText(null);
         a.show();
     }
 
 
     /**
-     * nested classe that periodically pull mails
-     * */
+     * Nested class that periodically pulls mails
+     */
     private class UpdateMailThread extends Thread {
-
         private ClientModel m;
-
         public UpdateMailThread(ClientModel m) {
             this.m = m;
         }
@@ -202,12 +188,10 @@ public class ClientModel {
         public void run() {
             try {
                 while (isConnect) {
-                    Thread.sleep(2000);     // ogni 2 secondi legge l'arrayList di email dal server
+                    Thread.sleep(2000);
                     ArrayList<Email> email = (ArrayList<Email>) in.readObject();
-
-                    // se la dimensione dell'arrayList è diversa da quella posseduta dal model
                     if (email.size() != observableEmail.size()) {
-                        observableEmail.setAll(email);  // imposta l'observableMailList a quella ricevuta dal server
+                        observableEmail.setAll(email);
                     }
                 }
             } catch (InterruptedException | EOFException e) {

@@ -8,8 +8,6 @@ import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import client.model.ClientModel;
@@ -17,7 +15,7 @@ import client.model.ClientModel;
 public class LoginController {
 
     @FXML
-    private Button accedi;
+    private Button login;
     @FXML
     private ComboBox comboMail;
     @FXML
@@ -29,24 +27,19 @@ public class LoginController {
     public void initialize(ClientModel model) {
         this.model = model;
         comboMail.getItems().addAll("client0@mailclient.it", "client1@mailclient.it", "client2@mailclient.it");
-
-        // abilita il bottone accedi
         comboMail.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                accedi.setDisable(false);
+                login.setDisable(false);
             }
         });
-
-        // abilita il bottone accedi
         mailField.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                accedi.setDisable(false);
+                login.setDisable(false);
             }
         });
-
-        accedi.setOnAction(new EventHandler<ActionEvent>() {
+        login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (comboMail.getValue() != null) {
@@ -57,7 +50,7 @@ public class LoginController {
                         System.out.println(ex.getMessage());
                     }
                     if (!model.serverOnline()) {
-                        Alert a = new Alert(Alert.AlertType.ERROR, "Client non connesso al server", ButtonType.OK);
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Client not connected to the server", ButtonType.OK);
                         a.setHeaderText(null);
                         a.show();
                     }
@@ -75,24 +68,24 @@ public class LoginController {
                             System.out.println(ex.getMessage());
                         }
                         if (!model.serverOnline()) {
-                            Alert a = new Alert(Alert.AlertType.ERROR, "Client non connesso al server", ButtonType.OK);
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Client not connected to the server", ButtonType.OK);
                             a.setHeaderText(null);
                             a.show();
                         }
                     } else {
                         mailField.getStyleClass().add("error");
-                        Alert a = new Alert(Alert.AlertType.ERROR, "Indirizzo mail non corretto. Riprovare", ButtonType.OK);
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Incorrect mail. Retry", ButtonType.OK);
                         a.setHeaderText(null);
                         a.show();
                     }
-
                 }
-
             }
         });
     }
 
-    /** show mail box and change Scene*/
+    /**
+     * Method that shows mail box and changes Scene
+     */
     public void showClientView(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../view/ClientView.fxml"));
@@ -113,7 +106,7 @@ public class LoginController {
             @Override
             public void handle(WindowEvent event) {
                 if (model.closeConnection()) {
-                    Alert al = new Alert(Alert.AlertType.ERROR, "Disconnessione improvvisa", ButtonType.CLOSE);
+                    Alert al = new Alert(Alert.AlertType.ERROR, "Sudden disconnection", ButtonType.CLOSE);
                     al.setHeaderText(null);
                     al.show();
                 }
