@@ -50,6 +50,7 @@ It is recommended to pay attention to the design phase to obtain the easiest imp
 ## Technologies
 - Java SE 14
 - Java FXML
+- MVC pattern
 
 ## Tools
 - IntelliJ IDEA Ultimate 
